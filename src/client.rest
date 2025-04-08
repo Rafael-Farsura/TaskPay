@@ -1,0 +1,15 @@
+###
+@baseUrl = http://localhost:3001
+@email = ddadadada@example.com
+@pass = 123456
+
+###
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{pass}}",
+  "walletAddress": "0x1234567890abdadadaeef",
+  "name": "User Test"
+}
