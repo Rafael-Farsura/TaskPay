@@ -1,8 +1,9 @@
 ###
 @baseUrl = http://localhost:3001
-@email = ddadadada@example.com
+@email = dedeee@example.com
 @pass = 123456
 
+@jwt = {{$processEnv JWT_SECRET}}
 ###
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
@@ -10,6 +11,21 @@ Content-Type: application/json
 {
   "email": "{{email}}",
   "password": "{{pass}}",
-  "walletAddress": "0x1234567890abdadadaeef",
+  "walletAddress": "0x1234567890aeedadfeffeef",
   "name": "User Test"
 }
+
+####
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Authorization: Bearer {{jwt}}
+
+{
+  "email": "{{email}}",
+  "password": "{{pass}}"
+}
+
+
+###
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{jwt}}

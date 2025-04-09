@@ -18,8 +18,10 @@ export class UsersService {
 
   async findOne(
     params: Partial<Pick<User, 'id' | 'email' | 'walletAddress'>>,
-  ): Promise<User | null> {
-    return this.authService.findUser(params);
+  ): Promise<User> {
+    const user = await this.authService.findUser(params);
+    if (!user) throw new BadRequestException('User not found');
+    return user;
   }
 
   async remove(id: number) {

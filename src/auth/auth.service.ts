@@ -63,16 +63,9 @@ export class AuthService {
   }
 
   async login(loginUserDto: LoginUserDto) {
-    const user = await this.userRepository.findOneBy({
-      email: loginUserDto.email,
-    });
+    const user = await this.findUser({ email: loginUserDto.email });
 
-    if (
-      !user ||
-      !(await bcrypt.compare(loginUserDto.password, user.password))
-    ) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    if (!user) throw new UnauthorizedException('Invalid credentials');
 
     return {
       user: plainToInstance(UserResponseDto, user, {
@@ -89,9 +82,8 @@ export class AuthService {
     if (
       recoveredAddress.toLowerCase() !==
       walletLoginDto.walletAddress.toLowerCase()
-    ) {
+    )
       throw new UnauthorizedException('Invalid signature');
-    }
 
     let user = await this.findUser({
       walletAddress: walletLoginDto.walletAddress,
@@ -101,6 +93,7 @@ export class AuthService {
       user = this.userRepository.create({
         walletAddress: walletLoginDto.walletAddress,
       });
+
       await this.userRepository.save(user);
     }
 
@@ -108,6 +101,7 @@ export class AuthService {
       user: plainToInstance(UserResponseDto, user, {
         excludeExtraneousValues: true,
       }),
+
       ...this.generateToken(user),
     };
   }
@@ -122,6 +116,7 @@ export class AuthService {
     if (!filter) throw new BadRequestException('No valid user filter provided');
 
     const [key, value] = filter as [keyof User, string];
+
     return this.userRepository.findOneBy({ [key]: value } as Record<
       string,
       any

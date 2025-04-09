@@ -9,12 +9,12 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
   @ApiProperty({ description: 'User address' })
-  @IsEthereumAddress()
+  // @IsEthereumAddress()
+  @IsNotEmpty()
   walletAddress?: string;
 
   @ApiProperty({ description: 'User email' })
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
   @ApiProperty({ description: 'User password' })
