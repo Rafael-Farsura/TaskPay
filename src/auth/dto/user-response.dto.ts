@@ -10,6 +10,9 @@ export class UserResponseDto {
   @Expose()
   walletAdress?: string;
 
+  @Expose()
+  name: string;
+
   constructor(partial: Partial<UserResponseDto>) {
     Object.assign(this, partial);
   }

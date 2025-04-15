@@ -1,6 +1,6 @@
 ###
 @baseUrl = http://localhost:3001
-@email = dedeee@example.com
+@email = bbbc@example.com
 @pass = 123456
 
 @jwt = {{$processEnv JWT_SECRET}}
@@ -11,7 +11,7 @@ Content-Type: application/json
 {
   "email": "{{email}}",
   "password": "{{pass}}",
-  "walletAddress": "0x1234567890aeedadfeffeef",
+  "walletAddress": "0x1234567890aeedfeffeef",
   "name": "User Test"
 }
 
@@ -29,3 +29,8 @@ Authorization: Bearer {{jwt}}
 ###
 GET {{baseUrl}}/users/me
 Authorization: Bearer {{jwt}}
+
+###
+GET {{baseUrl}}/auth/google/login
+###
+GET {{baseUrl}}/auth/google/callback

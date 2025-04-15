@@ -21,14 +21,8 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private jwtService: JwtService,
+    private readonly jwtService: JwtService,
   ) {}
-
-  private generateToken(user: User) {
-    return {
-      access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
-    };
-  }
 
   async register(
     createUserDto: CreateUserDto,
@@ -50,6 +44,7 @@ export class AuthService {
       throw new ConflictException('Wallet already registered');
 
     const user = this.userRepository.create(createUserDto);
+
     user.password = await bcrypt.hash(createUserDto.password, 10);
 
     await this.userRepository.save(user);
@@ -121,5 +116,34 @@ export class AuthService {
       string,
       any
     >);
+  }
+
+  async validateUser(profile: any) {
+    console.log('Profile received in validateUser :', profile);
+
+    if (!profile) {
+      throw new BadRequestException('Invalid profile data from Google');
+    }
+
+    let user = await this.userRepository.findOne({
+      where: { googleId: profile.id },
+    });
+
+    if (!user) {
+      user = this.userRepository.create({
+        googleId: profile.id,
+        email: profile.emails[0].value,
+        name: profile.displayName,
+      });
+      await this.userRepository.save(user);
+    }
+
+    return user;
+  }
+
+  private generateToken(user: User) {
+    return {
+      access_token: this.jwtService.sign({ sub: user.id, email: user.email }),
+    };
   }
 }

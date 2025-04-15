@@ -1,15 +1,31 @@
 import { Module } from '@nestjs/common';
+import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+
+import { User } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { JwtModule } from '@nestjs/jwt';
+
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { GoogleStrategy } from './strategies/google.strategy';
+import { PassportModule } from '@nestjs/passport';
+import googleOauthConfig from 'src/shared/config/google-auth/google-oauth.config';
+import { getDatabaseConfig } from 'src/shared/config/database/database.config';
+import { UsersService } from 'src/users/users.service';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
+
+    //!
+    PassportModule.register({ defaultStrategy: 'google' }),
+    //!
+
+    //!
+    ConfigModule.forFeature(googleOauthConfig),
+    //!
 
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -21,7 +37,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
 
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, GoogleStrategy, UsersService],
   controllers: [AuthController],
   exports: [AuthService],
 })
