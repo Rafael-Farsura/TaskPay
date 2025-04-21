@@ -1,0 +1,35 @@
+@url = http://localhost:3001
+
+###
+GET {{url}}/users/find
+Accept: application/json
+
+###
+GET {{url}}/users/find/id
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": "9795e063-c3bd-4b6a-95ed-9e1d8f72bab4"
+}
+
+###
+GET {{url}}/users/find/email
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "rafaelfarsura@gmail.com"
+}
+
+
+###
+POST {{url}}/users/create
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "rafaelfarsura@gmail.com",
+  "password": "admin123",
+  "name": "Rafael Farsura"
+}
