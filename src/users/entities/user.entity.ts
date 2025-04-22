@@ -1,3 +1,4 @@
+import { Exclude } from 'class-transformer';
 import {
   Column,
   CreateDateColumn,
@@ -16,6 +17,7 @@ export class User {
   @Index()
   email: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 100, select: false })
   password: string;
 

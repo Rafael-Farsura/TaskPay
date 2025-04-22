@@ -18,12 +18,12 @@ export class UsersController {
 
   @Get('find/id')
   findOneById(@Body('id', ParseUUIDPipe) id: string) {
-    return this.usersService.findOneById(id);
+    return this.usersService.findOneByEmailOrId(id);
   }
 
   @Get('find/email')
   findOneByEmail(@Body('email') email: string) {
-    return this.usersService.findOneByEmail(email);
+    return this.usersService.findOneByEmailOrId(email);
   }
 
   // @Patch(':id')

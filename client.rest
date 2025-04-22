@@ -5,12 +5,12 @@ GET {{url}}/users/find
 Accept: application/json
 
 ###
-GET {{url}}/users/find/id
+GET {{url}}/users/find/id/
 Accept: application/json
 Content-Type: application/json
 
 {
-  "id": "9795e063-c3bd-4b6a-95ed-9e1d8f72bab4"
+  "id": "0334b50a-dd1e-4fd2-9cfb-86018c975d7b"
 }
 
 ###
@@ -19,7 +19,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura@gmail.com"
+  "email": "rafaelfarsura7@gmail.com"
 }
 
 
@@ -29,7 +29,17 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura@gmail.com",
-  "password": "admin123",
+  "email": "rafaelfarsura7@gmail.com",
+  "password": "admin1234",
   "name": "Rafael Farsura"
+}
+
+###
+POST {{url}}/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "rafaelfarsura234@gmail.com",
+  "password": "admin1234"
 }
