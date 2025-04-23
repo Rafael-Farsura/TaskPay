@@ -11,6 +11,7 @@ import { User } from './entities/user.entity';
 
 import { isUUID } from 'class-validator';
 import { HashingServiceProtocol } from 'src/auth/hashing/hashing.service';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -55,10 +56,32 @@ export class UsersService {
     return user;
   }
 
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const { name, email, password } = updateUserDto;
+
+    const userData = {
+      name,
+      email,
+      password,
+    };
+
+    if (password) {
+      const passwordHash = await this.hashingService.hash(password);
+
+      userData['password'] = passwordHash;
+    }
+
+    const user = await this.userRepository.preload({
+      id,
+      ...userData,
+    });
+
+    if (!user) throw new NotFoundException('User not found!');
+
+    return await this.userRepository.save(user);
+  }
+
   /// TODO these will be implemented later
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
   // remove(id: number) {
   //   return `This action removes a #${id} user`;
   // }

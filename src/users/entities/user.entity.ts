@@ -17,8 +17,7 @@ export class User {
   @Index()
   email: string;
 
-  @Exclude()
-  @Column({ type: 'varchar', length: 100, select: false })
+  @Column({ type: 'varchar', length: 100 })
   password: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

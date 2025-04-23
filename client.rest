@@ -29,17 +29,36 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura7@gmail.com",
+  "email": "rafaelfarsura8@gmail.com",
   "password": "admin1234",
   "name": "Rafael Farsura"
 }
 
 ###
 POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "newemail@example.com",
+  "password": "newpassword123"
+}
+
+###
+POST {{url}}/auth/logout
 Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura234@gmail.com",
-  "password": "admin1234"
+  "id": "e9d82510-6722-4014-89ea-1df2c7406393"
+}
+
+###
+PATCH {{url}}/users/update?id=0334b50a-dd1e-4fd2-9cfb-86018c975d7b
+Accept: application/json
+Content-Type: application/json
+
+{
+  "email": "newemail@example.com",
+  "password": "newpassword123",
+  "name": "jonas"
 }
