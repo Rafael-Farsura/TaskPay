@@ -30,6 +30,6 @@ import { getJwtConfig } from 'src/config/jwt.config';
       useClass: BCryptService,
     },
   ],
-  exports: [AuthService, HashingServiceProtocol],
+  exports: [JwtModule, HashingServiceProtocol, ConfigModule],
 })
 export class AuthModule {}

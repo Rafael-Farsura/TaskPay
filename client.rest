@@ -1,11 +1,24 @@
 @url = http://localhost:3001
 
+
+
+###
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "newemail@example.com",
+  "password": "newpassword123"
+}
+
 ###
 GET {{url}}/users/find
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzM0YjUwYS1kZDFlLTRmZDItOWNmYi04NjAxOGM5NzVkN2IiLCJlbWFpbCI6Im5ld2VtYWlsQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ1NTI5MDI2LCJleHAiOjE3NDU1MzI2MjYsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSJ9.Mb78BUhmC0xZykajHeM3GyY1Zhf3zwUye6vqtw5upzg
 Accept: application/json
 
 ###
 GET {{url}}/users/find/id/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzM0YjUwYS1kZDFlLTRmZDItOWNmYi04NjAxOGM5NzVkN2IiLCJlbWFpbCI6Im5ld2VtYWlsQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ1NTI0ODA2LCJleHAiOjE3NDU1Mjg0MDYsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSJ9.JsYJNUkXiPfhVV5A_MmVi7DLXqLbBtWSHclf6bVbMdw
 Accept: application/json
 Content-Type: application/json
 
