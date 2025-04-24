@@ -19,7 +19,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura7@gmail.com"
+  "email": "rafaelfarsura8@gmail.com"
 }
 
 
@@ -41,15 +41,6 @@ Content-Type: application/json
 {
   "email": "newemail@example.com",
   "password": "newpassword123"
-}
-
-###
-POST {{url}}/auth/logout
-Accept: application/json
-Content-Type: application/json
-
-{
-  "id": "e9d82510-6722-4014-89ea-1df2c7406393"
 }
 
 ###
