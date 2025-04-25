@@ -1,68 +1,112 @@
+### Base URL da API
 @url = http://localhost:3001
 
+### Token de autenticação (será preenchido automaticamente após a requisição de login)
 @authToken = {{authenticate.response.body.access_token}}
 
 
+######################################################################
+#                          AUTENTICAÇÃO                               #
+######################################################################
+
+### [POST] Login do usuário
+# Autentica um usuário e retorna um token JWT.
+# Substitua os campos "email" e "password" pelos dados do usuário.
+# O token será utilizado automaticamente nas próximas requisições.
+#
+# 🔐 Requer: Nenhuma autorização
+# 📤 Body: email, password
+# 📥 Response: access_token, user data
 ###
 # @name authenticate
 POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura9@gmail.com",
-  "password": "admin1234"
+  "email": "<USER EMAIL HERE>",
+  "password": "<USER PASSWORD HERE>"
 }
 
-### FIND ALL
+
+######################################################################
+#                           USUÁRIOS                                 #
+######################################################################
+
+### [GET] Listar todos os usuários
+# Retorna a lista completa de usuários cadastrados.
+#
+# 🔐 Requer: Token de autenticação
+# 📥 Response: Array de usuários
+###
 GET {{url}}/users/find
 Authorization: Bearer {{authToken}}
 Accept: application/json
 
 
-### FIND BY ID
-GET {{url}}/users/find/id/
+### [GET] Buscar usuário por ID
+# Retorna os dados de um usuário específico, usando o ID.
+#
+# 🧩 Parâmetro: ID do usuário na URL
+# 🔐 Requer: Token de autenticação
+###
+GET {{url}}/users/find/id/<USER_ID_HERE>
 Authorization: Bearer {{authToken}}
 Accept: application/json
-Content-Type: application/json
 
-{
-  "id": "0334b50a-dd1e-4fd2-9cfb-86018c975d7b"
-}
 
-### FIND BY EMAIL
-GET {{url}}/users/find/email
-Accept: application/json
-Content-Type: application/json
+### [GET] Buscar usuário por email
+# Retorna os dados de um usuário específico, usando o e-mail.
+#
+# 🧩 Parâmetro: Email do usuário na URL
+# 🔐 Requer: Token de autenticação
+###
+GET {{url}}/users/find/email/<USER_EMAIL_HERE>
 Authorization: Bearer {{authToken}}
-
-{
-  "email": "rafael@example.com"
-}
+Accept: application/json
 
 
-### CREATE
+### [POST] Criar novo usuário
+# Cria um novo usuário no sistema.
+#
+# 🔐 Requer: Token de autenticação
+# 📤 Body: email, password, name
+# 📥 Response: dados do usuário criado
+###
 POST {{url}}/users/create
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
 Accept: application/json
+
+{
+  "email": "<USER_EMAIL_HERE>",
+  "password": "<USER_PASSWORD_HERE>",
+  "name": "<USER_NAME_HERE>"
+}
+
+
+### [PATCH] Atualizar dados de um usuário
+# Atualiza os dados de um usuário existente.
+#
+# 🧩 Parâmetro: ID do usuário na URL
+# 🔐 Requer: Token de autenticação
+# 📤 Body: email, password, name (qualquer um pode ser alterado)
+###
+PATCH {{url}}/users/update/<USER_ID_HERE>
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura9@gmail.com",
-  "password": "admin1234",
-  "name": "Rafael Farsura"
+  "email": "<USER_EMAIL_HERE>",
+  "password": "<USER_PASSWORD_HERE>",
+  "name": "<USER_NAME_HERE>"
 }
 
-### UPDATE
-PATCH {{url}}/users/update/965ce8c9-9aec-4a33-8135-c68ff12374c0 
-Authorization: Bearer {{authToken}}
-Content-Type: application/json
 
-{
-  "email": "rafaelfarsura2@example.com",
-  "password": "newpassword123",
-  "name": "jonas"
-}
-
-### DELETE
-DELETE {{url}}/users/delete/a6b79bcd-7703-4cd7-aa67-583f1ff273f6
+### [DELETE] Deletar um usuário
+# Remove permanentemente um usuário do sistema.
+#
+# 🧩 Parâmetro: ID do usuário na URL
+# 🔐 Requer: Token de autenticação
+###
+DELETE {{url}}/users/delete/<USER_ID_HERE>
 Authorization: Bearer {{authToken}}
