@@ -24,6 +24,6 @@ async function bootstrap() {
   console.log(`Task-Pay is running at port on: ${await app.getUrl()}`);
 }
 
-bootstrap().catch(() => {
-  console.error('Failed to start the application');
+bootstrap().catch((error) => {
+  console.error('Failed to start the application\n' + error);
 });
