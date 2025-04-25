@@ -1,24 +1,27 @@
 @url = http://localhost:3001
 
+@authToken = {{authenticate.response.body.access_token}}
 
 
 ###
+# @name authenticate
 POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "newemail@example.com",
-  "password": "newpassword123"
+  "email": "rafaelfarsura9@gmail.com",
+  "password": "admin1234"
 }
 
-###
+### FIND ALL
 GET {{url}}/users/find
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzM0YjUwYS1kZDFlLTRmZDItOWNmYi04NjAxOGM5NzVkN2IiLCJlbWFpbCI6Im5ld2VtYWlsQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ1NTI5MDI2LCJleHAiOjE3NDU1MzI2MjYsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSJ9.Mb78BUhmC0xZykajHeM3GyY1Zhf3zwUye6vqtw5upzg
+Authorization: Bearer {{authToken}}
 Accept: application/json
 
-###
+
+### FIND BY ID
 GET {{url}}/users/find/id/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMzM0YjUwYS1kZDFlLTRmZDItOWNmYi04NjAxOGM5NzVkN2IiLCJlbWFpbCI6Im5ld2VtYWlsQGV4YW1wbGUuY29tIiwiaWF0IjoxNzQ1NTI0ODA2LCJleHAiOjE3NDU1Mjg0MDYsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSIsImlzcyI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMSJ9.JsYJNUkXiPfhVV5A_MmVi7DLXqLbBtWSHclf6bVbMdw
+Authorization: Bearer {{authToken}}
 Accept: application/json
 Content-Type: application/json
 
@@ -26,43 +29,40 @@ Content-Type: application/json
   "id": "0334b50a-dd1e-4fd2-9cfb-86018c975d7b"
 }
 
-###
+### FIND BY EMAIL
 GET {{url}}/users/find/email
 Accept: application/json
 Content-Type: application/json
+Authorization: Bearer {{authToken}}
 
 {
-  "email": "rafaelfarsura8@gmail.com"
+  "email": "rafael@example.com"
 }
 
 
-###
+### CREATE
 POST {{url}}/users/create
 Accept: application/json
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "rafaelfarsura8@gmail.com",
+  "email": "rafaelfarsura9@gmail.com",
   "password": "admin1234",
   "name": "Rafael Farsura"
 }
 
-###
-POST {{url}}/auth/login
+### UPDATE
+PATCH {{url}}/users/update/965ce8c9-9aec-4a33-8135-c68ff12374c0 
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "email": "newemail@example.com",
-  "password": "newpassword123"
-}
-
-###
-PATCH {{url}}/users/update?id=0334b50a-dd1e-4fd2-9cfb-86018c975d7b
-Accept: application/json
-Content-Type: application/json
-
-{
-  "email": "newemail@example.com",
+  "email": "rafaelfarsura2@example.com",
   "password": "newpassword123",
   "name": "jonas"
 }
+
+### DELETE
+DELETE {{url}}/users/delete/a6b79bcd-7703-4cd7-aa67-583f1ff273f6
+Authorization: Bearer {{authToken}}

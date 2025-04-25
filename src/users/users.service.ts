@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +13,7 @@ import { User } from './entities/user.entity';
 import { isUUID } from 'class-validator';
 import { HashingServiceProtocol } from 'src/auth/hashing/hashing.service';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { TokenPayloadDto } from '../auth/dto/token-payload.dto';
 
 @Injectable()
 export class UsersService {
@@ -53,12 +55,17 @@ export class UsersService {
       where: isUUID(idOrMail) ? { id: idOrMail } : { email: idOrMail },
     });
 
+    if (!user) throw new NotFoundException(`User: ${idOrMail} not found`);
+
     return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    tokenPayloadDto: TokenPayloadDto,
+  ) {
     const { name, email, password } = updateUserDto;
-
     const userData = {
       name,
       email,
@@ -67,7 +74,6 @@ export class UsersService {
 
     if (password) {
       const passwordHash = await this.hashingService.hash(password);
-
       userData['password'] = passwordHash;
     }
 
@@ -76,13 +82,22 @@ export class UsersService {
       ...userData,
     });
 
-    if (!user) throw new NotFoundException('User not found!');
+    if (user?.id !== tokenPayloadDto.sub)
+      throw new ForbiddenException('You could not edit other user infos.');
 
     return await this.userRepository.save(user);
   }
 
-  /// TODO these will be implemented later
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+  async remove(id: string, tokenPayloadDto: TokenPayloadDto) {
+    const user = await this.findOneByEmailOrId(id);
+
+    if (user?.id !== tokenPayloadDto.sub)
+      throw new ForbiddenException('You could not delete other user');
+
+    await this.userRepository.remove(user);
+
+    return {
+      message: `User: ${user.name} was deleted successfully `,
+    };
+  }
 }

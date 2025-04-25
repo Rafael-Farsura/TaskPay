@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { getJwtConfig } from 'src/config/jwt.config';
+import { REQUEST_TOKEN_PAYLOAD_KEY } from '../auth.constants';
 
 @Injectable()
 export class AuthTokenGuard implements CanActivate {
@@ -30,14 +31,13 @@ export class AuthTokenGuard implements CanActivate {
         jwtOptions,
       );
 
-      request.user = payload;
-
-      return true;
+      request[REQUEST_TOKEN_PAYLOAD_KEY] = payload;
     } catch (err) {
       console.error('JWT verification failed ! \n Error: ', err);
 
       throw new UnauthorizedException('Failed to login');
     }
+    return true;
   }
 
   extractTokenFromHeader(request: Request): string | undefined {
