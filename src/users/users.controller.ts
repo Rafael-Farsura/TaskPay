@@ -31,13 +31,13 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('find/id')
-  findOneById(@Body('id', ParseUUIDPipe) id: string) {
+  @Get('find/id/:id')
+  findOneById(@Param('id', ParseUUIDPipe) id: string) {
     return this.usersService.findOneByEmailOrId(id);
   }
 
-  @Get('find/email')
-  findOneByEmail(@Body('email') email: string) {
+  @Get('find/email/:email')
+  findOneByEmail(@Param('email') email: string) {
     return this.usersService.findOneByEmailOrId(email);
   }
 
