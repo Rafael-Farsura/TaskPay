@@ -6,7 +6,8 @@ import { User } from 'src/users/entities/user.entity';
 import { HashingServiceProtocol } from './hashing/hashing.service';
 import { LoginDto } from './dto/login.dto';
 import { ConfigService } from '@nestjs/config';
-import { getJwtConfig } from 'src/config/jwt.config';
+import { getJwtConfig, getJwtRefreshTtl } from 'src/config/jwt.config';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -39,18 +40,57 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException('Invalid user credentials');
 
-    const jwtOptions = getJwtConfig(this.configService);
+    return await this.createTokens(user);
+  }
 
-    const payload = {
-      sub: user.id,
-      email: user.email,
-    };
+  private async createTokens(user: User) {
+    const jwtTtl = Number(this.configService.get<number>('JWT_TTL'));
+    const refreshTtl = getJwtRefreshTtl(this.configService);
 
-    return {
-      access_token: await this.jwtService.signAsync(
-        payload,
-        jwtOptions.signOptions,
-      ),
-    };
+    const access_tokenPromise = await this.signJwtAsync<Partial<User>>(
+      user.id,
+      jwtTtl,
+      { email: user.email },
+    );
+    const refresh_tokenPromise = await this.signJwtAsync(user.id, refreshTtl);
+
+    const [access_token, refresh_token] = await Promise.all([
+      access_tokenPromise,
+      refresh_tokenPromise,
+    ]);
+
+    return { access_token, refresh_token };
+  }
+
+  private async signJwtAsync<T>(sub: string, expiresIn: number, payload?: T) {
+    const jwtOpts = getJwtConfig(this.configService);
+
+    return await this.jwtService.signAsync(
+      {
+        sub,
+        ...payload,
+      },
+      {
+        expiresIn,
+        ...jwtOpts.signOptions,
+      },
+    );
+  }
+
+  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
+    const jwtOpts = getJwtConfig(this.configService);
+
+    try {
+      const { sub } = await this.jwtService.verifyAsync(
+        refreshTokenDto.refreshToken,
+        jwtOpts,
+      );
+
+      const user = await this.usersService.findOneByEmailOrId(sub as string);
+
+      if (user) return await this.createTokens(user);
+    } catch (err) {
+      throw new UnauthorizedException(err.message);
+    }
   }
 }
