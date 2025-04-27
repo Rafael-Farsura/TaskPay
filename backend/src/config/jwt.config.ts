@@ -11,3 +11,6 @@ export const getJwtConfig = (
     expiresIn: parseInt(configService.get<string>('JWT_TTL') ?? '3600'),
   },
 });
+
+export const getJwtRefreshTtl = (configService: ConfigService) =>
+  configService.get<number>('JWT_REFRESH_TTL') ?? 3600;

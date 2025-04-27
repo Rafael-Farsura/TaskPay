@@ -3,6 +3,7 @@
 
 ### Token de autenticação (será preenchido automaticamente após a requisição de login)
 @authToken = {{authenticate.response.body.access_token}}
+@refreshToken = {{authenticate.response.body.refresh_token}}
 
 
 ######################################################################
@@ -25,6 +26,23 @@ Content-Type: application/json
 {
   "email": "<USER EMAIL HERE>",
   "password": "<USER PASSWORD HERE>"
+}
+
+### [POST] Re-Autenticação do usuário
+# Re-autentica um usuário e retorna um token JWT.
+# Substitua os campos "email" e "password" pelos dados do usuário.
+# O token será utilizado automaticamente nas próximas requisições.
+#
+# 🔐 Requer: Nenhuma autorização
+# 📤 Body: refreshToken
+# 📥 Response: refresh_token, user data
+###
+# @name reAuthenticate
+POST {{url}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}"
 }
 
 
